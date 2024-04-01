@@ -12,6 +12,7 @@ import java.io.File;
  */
 public final class Reader {
 //for the inital commit
+    //for test commit 2
     public static Battle loadBattle(File file) {
         return null;
     }
