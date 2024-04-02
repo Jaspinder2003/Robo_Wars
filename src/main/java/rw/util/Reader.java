@@ -38,29 +38,29 @@ public final class Reader {
                         char symbol=parts[3].charAt(0);
                         int Health=Integer.parseInt(parts[5]);
                         char weaponType=parts[4].charAt(0);
-                        if(type=="MAXIMAL"){
+                        if(type.equals("MAXIMAL")){
                             int weaponStrength = Integer.parseInt(parts[6]);
                             int armorStrength = Integer.parseInt(parts[7]);
                             Maximal maximal = new Maximal(symbol, name, Health, weaponStrength, armorStrength);
-                            battle.addEntity(row, col, maximal);
+                            battle.addEntity(row, column, maximal);
                         }
-                        if(type=="PREDACON"){
-                            WeaponType W = WeaponType.valueOf(parts[6]);
+                        if(type.equals("PREDACON")){
+                            char weaponChar = parts[6].charAt(0); // Get the first character of the weapon type
+                            WeaponType W = WeaponType.getWeaponType(weaponChar);
                             PredaCon predaCon = new PredaCon(symbol, name, Health, W);
-                            battle.addEntity(row, col, predaCon);
+                            battle.addEntity(row, column, predaCon);
                         }
                     } else if (parts.length==3) {
                         String type=parts[2];
-                        if(type=="WALL"){
-                            battle.addEntity(row, col, Wall.getWall());
+                        if(type.equals("WALL")){
+                            battle.addEntity(row, column, Wall.getWall());
                         }
                     }
                 }
             }
         }
-        catch (FileNotFoundException e){
-            System.err.println("File not found: "+file.getPath());
-            return null;
+        catch (FileNotFoundException e) {
+            System.err.println("File not found: " + file.getPath());
         }
         return battle;
     }
