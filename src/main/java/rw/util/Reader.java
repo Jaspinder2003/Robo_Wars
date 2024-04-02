@@ -36,7 +36,7 @@ public final class Reader {
                         String type=parts[2];
                         String name=parts[3];
                         char symbol=parts[3].charAt(0);
-                        int Health=Integer.parseInt(parts[4]);
+                        int Health=Integer.parseInt(parts[5]);
                         char weaponType=parts[4].charAt(0);
                         if(type=="MAXIMAL"){
                             int weaponStrength = Integer.parseInt(parts[6]);
@@ -45,8 +45,8 @@ public final class Reader {
                             battle.addEntity(row, col, maximal);
                         }
                         if(type=="PREDACON"){
-                            WeaponType weaponType = WeaponType.valueOf(String.valueOf(parts[6]));
-                            PredaCon predaCon = new PredaCon(symbol, name, Health, weaponType);
+                            WeaponType W = WeaponType.valueOf(parts[6]);
+                            PredaCon predaCon = new PredaCon(symbol, name, Health, W);
                             battle.addEntity(row, col, predaCon);
                         }
                     } else if (parts.length==3) {
