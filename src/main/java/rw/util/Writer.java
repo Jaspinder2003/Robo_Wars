@@ -1,5 +1,4 @@
 package rw.util;
-
 import rw.battle.Battle;
 import rw.battle.Entity;
 import rw.battle.Maximal;
