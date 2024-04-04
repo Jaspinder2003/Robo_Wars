@@ -308,6 +308,7 @@ public class MainController {
                 int column = Integer.parseInt(columnField.getText());
                 if ("Add".equals(action)) {
                     if (Predbutton.isSelected() || Maxibutton.isSelected()) {
+                        System.out.println(row + " -------------------- "+ column);
                         addOrDeleteRobot(row, column, Predbutton.isSelected(), true); // true for add
                     }
                 } else if ("Delete".equals(action)) {
@@ -320,6 +321,7 @@ public class MainController {
     }
 
     private void addOrDeleteRobot(int row, int column, boolean isPredaCon, boolean isAdd) {
+        System.out.println("Here is used ddddddddddddddddd");
         if (isAdd) {
             Entity newEntity = null;
             // Validate input fields before entity creation
@@ -332,6 +334,8 @@ public class MainController {
                 WeaponType weaponType = WeaponType.valueOf(weaponTypeStr.toUpperCase()); // Adjusted for direct use
 
                 newEntity = new PredaCon(symbol, name, health, weaponType);
+
+
             } else { // For Maximal
                 char symbol = Maxisymbol.getText().charAt(0);
                 String name = Maxiname.getText();
@@ -348,6 +352,7 @@ public class MainController {
                 battle.addEntity(row, column, newEntity); // Adjusted for correct indexes if necessary
                 updateUIWithNewEntity(row, column, newEntity); // Implement this method to update UI
             }
+            System.out.println(battle);
 
         } else {
             visuallyClearCell(row - 1, column - 1);
@@ -390,7 +395,7 @@ public class MainController {
                 Integer nodeColumn = GridPane.getColumnIndex(node);
 
                 // Adjust row and column indices as necessary, depending on how they're set up in your GridPane
-                if (nodeRow != null && nodeColumn != null && nodeRow == row && nodeColumn == column && node instanceof TextField) {
+                if (nodeRow != null && nodeColumn != null && nodeRow == row+1 && nodeColumn == column+1 && node instanceof TextField) {
                     char symbol = entity.getSymbol(); // Assuming a getSymbol method exists for all entities
                     String s=String.valueOf(symbol);
                     ((TextField) node).setText(s);
@@ -411,7 +416,7 @@ public class MainController {
     @FXML
     private void ObjectViewer() {
         // Assuming the declaration of battle somewhere in your class
-        infoViewerTextArea.setText("");
+
 
 
         // Create the custom dialog for grid location input
@@ -457,6 +462,7 @@ public class MainController {
 
                     if (entity instanceof PredaCon) {
                         PredaCon pred = (PredaCon) entity;
+                        infoViewerTextArea.setText("");
                         appendLinesTotextarea(pred.getName());
                         appendLinesTotextarea(String.valueOf(pred.getHealth()));
                         appendLinesTotextarea(String.valueOf(entity.getSymbol()));
@@ -471,6 +477,7 @@ public class MainController {
                         Maximal maximal = (Maximal) entity;
 
                         appendLinesTotextarea(maximal.getName());
+                        infoViewerTextArea.setText("");
                         appendLinesTotextarea(String.valueOf(maximal.getHealth()));
                         appendLinesTotextarea(String.valueOf(maximal.getSymbol()));
                         appendLinesTotextarea(String.valueOf(maximal.armorStrength()));
@@ -512,4 +519,6 @@ public class MainController {
     private void quitApplication() {
         Platform.exit();
     }
+
+
 }
