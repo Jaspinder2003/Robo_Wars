@@ -67,6 +67,9 @@ public class MainController {
     @FXML
     private MenuItem quito;
     @FXML
+    private MenuItem abouto;
+
+    @FXML
     private ScrollPane gridScrollPane;
     @FXML
     private Button newButton;
@@ -74,10 +77,18 @@ public class MainController {
     private RadioButton Predbutton;
     @FXML
     private RadioButton Maxibutton;
+    @FXML
+    private Button showDetailButton;
 
 
     @FXML
     private ComboBox weaponbox;
+
+    @FXML
+    private TextArea infoViewerTextArea;
+
+    @FXML
+    private Label leftStatusLabel;
 
     private Stage stage;
     public void setStage(Stage stage) {
@@ -156,12 +167,31 @@ public class MainController {
         MaxiHealth.setText(String.valueOf(maximal.getHealth()));
         Maxiweapon.setText(String.valueOf(maximal.weaponStrength()));
         MaxiArmour.setText(String.valueOf(maximal.armorStrength()));
+
+        try {
+            Integer.parseInt(String.valueOf(maximal.weaponStrength()));
+            Integer.parseInt(String.valueOf(maximal.armorStrength()));
+
+        } catch (NumberFormatException e) {
+            updateLeftStatusLabel("Invalid Weapon or Armour Strenght");
+            return ;
+        }
+
+
+
     }
     @FXML
     private void createNewBattle() {
         clearBattleGrid(); // Clears any existing grid content
         int numberOfRows = getNumberOfRows();
         int numberOfColumns = getNumberOfColumns();
+
+        if(numberOfRows < 0 || numberOfColumns <0){
+            updateLeftStatusLabel("Invalid number of Row or column");
+            return;
+        }
+
+
 
 
 
@@ -370,5 +400,116 @@ public class MainController {
         });
     }
 
+    // Method to append lines to the TextArea
+    private void appendLinesTotextarea(String line) {
 
+        infoViewerTextArea.appendText(line + "\n"); // Appends each line with a newline character
+
+
+    }
+
+    @FXML
+    private void ObjectViewer() {
+        // Assuming the declaration of battle somewhere in your class
+        infoViewerTextArea.setText("");
+
+
+        // Create the custom dialog for grid location input
+        Dialog<String> dialog = new Dialog<>();
+        dialog.setTitle("Object information viewer");
+        dialog.setHeaderText("Please enter the row and column:");
+
+        // Set the button type.
+        ButtonType modifyButtonType = new ButtonType("Submit", ButtonBar.ButtonData.OK_DONE);
+        dialog.getDialogPane().getButtonTypes().addAll(modifyButtonType, ButtonType.CANCEL);
+
+        GridPane grid = new GridPane();
+        grid.setHgap(10);
+        grid.setVgap(10);
+
+        TextField rowField = new TextField();
+        rowField.setPromptText("Row");
+        TextField columnField = new TextField();
+        columnField.setPromptText("Column");
+
+        grid.add(new Label("Row:"), 0, 0);
+        grid.add(rowField, 1, 0);
+        grid.add(new Label("Column:"), 0, 1);
+        grid.add(columnField, 1, 1);
+
+        dialog.getDialogPane().setContent(grid);
+
+        Platform.runLater(rowField::requestFocus);
+
+        dialog.setResultConverter(dialogButton -> {
+            if (dialogButton == modifyButtonType) {
+                // Here you could capture the row and column values and do something with them
+                int row = Integer.parseInt(rowField.getText());
+                int column = Integer.parseInt(columnField.getText());
+
+                Entity entity = battle.getEntity(row, column);
+
+                System.out.println(battle);
+
+
+                if (entity != null) {
+                    // Set common properties for all entities.
+
+                    if (entity instanceof PredaCon) {
+                        PredaCon pred = (PredaCon) entity;
+                        appendLinesTotextarea(pred.getName());
+                        appendLinesTotextarea(String.valueOf(pred.getHealth()));
+                        appendLinesTotextarea(String.valueOf(entity.getSymbol()));
+                        appendLinesTotextarea(String.valueOf(weaponbox.getValue()));
+
+
+                        //appendLinesTotextarea();
+
+                        weaponbox.getSelectionModel().select(pred.getWeaponType().toString());
+
+                    } else if (entity instanceof Maximal) {
+                        Maximal maximal = (Maximal) entity;
+
+                        appendLinesTotextarea(maximal.getName());
+                        appendLinesTotextarea(String.valueOf(maximal.getHealth()));
+                        appendLinesTotextarea(String.valueOf(maximal.getSymbol()));
+                        appendLinesTotextarea(String.valueOf(maximal.armorStrength()));
+                        appendLinesTotextarea(String.valueOf(maximal.weaponStrength()));
+
+
+                    }
+                }
+
+                return "Submit";
+            }
+            return null;
+        });
+
+        Optional<String> result = dialog.showAndWait();
+
+    }
+
+    @FXML
+    private void AboutBox() {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Robot Wars World Editor V1.1"); // Title of the application
+        alert.setHeaderText("About Robot Wars World Editor"); // More descriptive header
+        alert.setContentText(
+                "Author: Jaspinder Singh Maan\n" +
+                        "Email: JaspinderSingh.Maan@ucalgary.ca\n" +
+                        "Version: 1.1\n\n" +
+                        "This is a battle editor for a game. Designed to provide a user-friendly " +
+                        "interface for creating and editing battle scenarios."
+        );
+        alert.showAndWait();
+    }
+
+    @FXML
+    private void updateLeftStatusLabel(String message) {
+        leftStatusLabel.setText(message);
+    }
+    @FXML
+    private void quitApplication() {
+        Platform.exit();
+    }
 }
