@@ -19,7 +19,10 @@ public class Main extends Application {
     public void start(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("Main.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 800, 600);
-        //Students edit here to set up the scene
+        stage.setTitle("Robot Battle Map Editor");
+        MainController controller = fxmlLoader.getController();
+        controller.setStage(stage);
+
         stage.setScene(scene);
         stage.show();
     }
