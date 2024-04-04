@@ -15,6 +15,7 @@ import rw.battle.Maximal;
 import rw.battle.PredaCon;
 import rw.enums.WeaponType;
 import rw.util.Reader;
+import rw.util.Writer;
 
 import java.io.File;
 import java.util.Optional;
@@ -519,6 +520,55 @@ public class MainController {
     private void quitApplication() {
         Platform.exit();
     }
+    // This variable should be a class member, not inside the method.
+    private File currentFile = null;
+
+    /**
+     * Handles both "Save" and "Save As" actions.
+     * @param askPath Whether to ask the user for a file path or not.
+     */
+    private void save(boolean askPath) {
+        if (askPath || currentFile == null) {
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setTitle("Save As");
+            fileChooser.getExtensionFilters().addAll(
+                    new FileChooser.ExtensionFilter("Text Files", "*.txt"),
+                    new FileChooser.ExtensionFilter("All Files", "*.*")
+            );
+
+            // Here we present the Save File dialog to the user.
+            File selectedFile = fileChooser.showSaveDialog(stage);
+
+            // If the user selects a file, we update the currentFile.
+            // If they cancel, we simply return without doing anything.
+            if (selectedFile != null) {
+                currentFile = selectedFile;
+            } else {
+                return;
+            }
+        }
+
+        if (currentFile != null) {
+
+            // Assuming your Writer.saveBattle method throws IOException.
+            // The actual method call to save the battle configuration.
+            Writer.saveBattle(battle, currentFile);
+
+        }
+    }
+
+    @FXML
+    private void handleSave() {
+        save(false); // Pass false to "save" indicating that we do not wish to ask the user for a new file path.
+    }
+
+    @FXML
+    private void handleSaveAs() {
+        save(true); // Pass true to "save as" indicating we wish to ask the user for a new file path.
+    }}
+
+// Utility method to show an alert dialog with a message
 
 
-}
+
+
