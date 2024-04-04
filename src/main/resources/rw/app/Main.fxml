@@ -27,8 +27,8 @@
                     <items>
 
                         <MenuItem fx:id="openo" mnemonicParsing="false" onAction="#fileLoader" text="Open…" />
-                        <MenuItem fx:id="saveo" mnemonicParsing="false" text="Save" />
-                        <MenuItem fx:id="SaveAso" mnemonicParsing="false" text="Save As…" />
+                        <MenuItem fx:id="saveo" mnemonicParsing="false" onAction="#handleSave" text="Save" />
+                        <MenuItem fx:id="SaveAso" mnemonicParsing="false" onAction="#handleSaveAs" text="Save As…" />
                         <MenuItem fx:id="quito" mnemonicParsing="false" onAction="#quitApplication" text="Quit" />
                     </items>
                 </Menu>
