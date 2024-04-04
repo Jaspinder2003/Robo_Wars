@@ -5,50 +5,52 @@ import rw.battle.Entity;
 import rw.battle.Maximal;
 import rw.battle.PredaCon;
 import rw.battle.Wall;
+import rw.enums.WeaponType;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.PrintWriter;
+import java.util.stream.IntStream;
 
 public class Writer {
 
-    public static void saveBattle(Battle battle, File file) throws IOException {
-        try (PrintWriter pw = new PrintWriter(new FileWriter(file))) {
-            int rows = battle.getRows();
-            int columns = battle.getColumns();
-            pw.println(rows + "\n" + columns);
+    public static void saveBattle(Battle battle, File file) {
+        try (FileWriter writer = new FileWriter(file)) {
+            // Write rows and columns
+            writer.write(battle.getRows() + " " + battle.getColumns() + "\n");
 
-            // Iterate over each position in the battle grid
-            for (int i = 0; i < rows; i++) {
-                for (int j = 0; j < columns; j++) {
-                    Entity entity = battle.getEntity(i, j);
-                    if (entity != null) { // Check if there's an entity at the current position
-                        String line = entityToLine(entity, i, j);
-                        if (line != null) {
-                            pw.println(line);
+            // Iterate over each cell
+            IntStream.range(0, battle.getRows()).forEach(row -> {
+                IntStream.range(0, battle.getColumns()).forEach(column -> {
+                    Entity entity = battle.getEntity(row, column);
+                    try {
+                        if (entity instanceof Maximal) {
+                            Maximal maximal = (Maximal) entity;
+                            // Format: row,column,MAXIMAL,symbol,name,health,weaponStrength,armorStrength
+                            writer.write(String.format("%d,%d,MAXIMAL,%s,%s,%d,%d,%d\n",
+                                    row, column, maximal.getSymbol(), maximal.getName(), maximal.getHealth(),
+                                    maximal.weaponStrength(), maximal.armorStrength()));
+                        } else if (entity instanceof PredaCon) {
+                            PredaCon predaCon = (PredaCon) entity;
+                            // Format: row,column,PREDACON,symbol,name,health,weaponType
+                            writer.write(String.format("%d,%d,PREDACON,%s,%s,%d,%s\n",
+                                    row, column, predaCon.getSymbol(), predaCon.getName(), predaCon.getHealth(),
+                                    predaCon.getWeaponType().toString().charAt(0)));
+                        } else if (entity instanceof Wall) {
+                            // Format: row,column,WALL
+                            writer.write(String.format("%d,%d,WALL\n", row, column));
+                        } else {
+                            // Empty cell
+                            writer.write(String.format("%d,%d\n", row, column));
                         }
+                    } catch (IOException e) {
+                        e.printStackTrace();
                     }
-                }
-            }
-        } // PrintWriter is auto-closed here, thanks to try-with-resources
-    }
-
-
-    private static String entityToLine(Entity entity, int row, int column) {
-        if (entity instanceof Maximal) {
-            Maximal maximal = (Maximal) entity;
-
-            return String.format("%d,%d,MAXIMAL,%c,%s,%d,%d,%d", row, column, maximal.getSymbol(),
-                    maximal.getName(), maximal.getHealth(), maximal.weaponStrength(), maximal.armorStrength());
-        } else if (entity instanceof PredaCon) {
-            PredaCon predaCon = (PredaCon) entity;
-            return String.format("%d,%d,PREDACON,%c,%s,%d,%s", row, column, predaCon.getSymbol(),
-                    predaCon.getName(), predaCon.getHealth(), predaCon.getWeaponType().name());
-        } else if (entity instanceof Wall) {
-            return String.format("%d,%d,WALL", row, column);
+                });
+            });
+        } catch (IOException e) {
+            System.err.println("Error writing to file: " + file.getPath());
+            e.printStackTrace();
         }
-        // Return null if it's an unknown entity or empty space
-        return null;
     }
 }
