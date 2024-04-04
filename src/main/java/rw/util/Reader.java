@@ -1,3 +1,8 @@
+/**
+ * Name: Jaspinder Singh Maan
+ * Tutorial : TUT 15
+ * UCID: 30209953
+ */
 package rw.util;
 
 import rw.battle.Battle;
@@ -21,16 +26,18 @@ public final class Reader {
     public static Battle loadBattle(File file) {
         Battle battle=null;
         try(Scanner scanner=new Scanner(file)){
-            int rows= scanner.nextInt();
-            int col=scanner.nextInt();
-            battle=new Battle(rows,col);
-
+            int rows= scanner.nextInt();//reads rows from 1st line
+            int col=scanner.nextInt();// reads columns from 2ndline
+            battle=new Battle(rows,col);//creates a battle object
+/**
+ * splits according to "," and uses its various parts
+ */
             while (scanner.hasNextLine()){
                 String line=scanner.nextLine().trim();
                 if(!line.isEmpty()){
                     String[] parts=line.split(",");
-                    int row = Integer.parseInt(parts[0]);
-                    int column=Integer.parseInt(parts[1]);
+                    int row = Integer.parseInt(parts[0]);//converts to Integer
+                    int column=Integer.parseInt(parts[1]);//converts to Integer
 
                     if(parts.length>3){
                         String type=parts[2];

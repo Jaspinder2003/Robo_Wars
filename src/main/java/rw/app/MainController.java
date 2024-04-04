@@ -1,3 +1,9 @@
+/**
+ * Name: Jaspinder Singh Maan
+ * Tutorial : TUT 15
+ * UCID: 30209953
+ */
+
 package rw.app;
 
 import javafx.application.Platform;
@@ -36,6 +42,10 @@ public class MainController {
 
     }
 
+    /**
+     * used to connect suing ids
+     * add method to action to connect
+     */
     @FXML
     private TextField rownumber;
 
@@ -96,10 +106,15 @@ public class MainController {
         this.stage = stage;
     }
 
+    /**
+     * File Loader used to load files(open files)
+     * Extension is used to create restriction
+     *
+     */
     @FXML
     protected void fileLoader() {
         FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Open Battle File"); // Optional: Set a title for the file chooser window
+        fileChooser.setTitle("Open Battle File");
         fileChooser.getExtensionFilters().add(
                 new FileChooser.ExtensionFilter("TXT files (*.txt)", "*.txt")
         );
@@ -116,6 +131,11 @@ public class MainController {
             prepareAndDisplayGrid();
         }
     }
+
+    /**
+     * used to  create a grid automatically while loading
+     * it is further used in fileLoader
+     */
     private void prepareAndDisplayGrid() {
         int rows = Integer.parseInt(rownumber.getText());
         int columns = Integer.parseInt(columnnumber.getText());
@@ -124,6 +144,10 @@ public class MainController {
         gridScrollPane.setContent(battleGrid);
     }
 
+    /**
+     * this actually loads battle and creates the grid and updates entity
+     * @param file
+     */
     private void loadBattleFromFile(File file) {
         battle = Reader.loadBattle(file);
         rownumber.setText(String.valueOf(battle.getRows()));
@@ -139,6 +163,10 @@ public class MainController {
         }
     }
 
+    /**
+     * updates entities
+     * @param entity
+     */
     private void updateEntityDetails(Entity entity) {
         if (entity instanceof PredaCon) {
             updatePredaConDetails((PredaCon) entity);
@@ -147,6 +175,10 @@ public class MainController {
         }
     }
 
+    /**
+     * updates Predacon details
+     * @param pred
+     */
     private void updatePredaConDetails(PredaCon pred) {
         Predsymbol.setText(String.valueOf(pred.getSymbol()));
         System.out.println(pred.getName());
@@ -162,6 +194,10 @@ public class MainController {
         weaponbox.getSelectionModel().select(weaponChoice);
     }
 
+    /**
+     * updates Maximal detailis
+     * @param maximal
+     */
     private void updateMaximalDetails(Maximal maximal) {
         Maxisymbol.setText(String.valueOf(maximal.getSymbol()));
         Maxiname.setText(maximal.getName());
@@ -181,6 +217,10 @@ public class MainController {
 
 
     }
+
+    /**
+     * creates new grid completely which is also empty
+     */
     @FXML
     private void createNewBattle() {
         clearBattleGrid(); // Clears any existing grid content
@@ -217,18 +257,20 @@ public class MainController {
         gridScrollPane.setContent(battleGrid);
     }
 
-
+    /**
+     * clears battlegrid
+     */
     private void clearBattleGrid() {
         gridScrollPane.setContent(null);
     }
 
     private int getNumberOfRows() {
         return Integer.parseInt(rownumber.getText());
-    }
+    }//gets number of row
 
     private int getNumberOfColumns() {
         return Integer.parseInt(columnnumber.getText());
-    }
+    }//gets number of columns
 
     private GridPane prepareBattleGrid(int rows, int columns) {
         GridPane battleGrid = new GridPane();
@@ -239,7 +281,7 @@ public class MainController {
             }
         }
         return battleGrid;
-    }
+    }//used to preapre battle grid and add items to it but does not create it completely
 
     private TextField createBattleCell(int row, int column, int totalRows, int totalColumns) {
         TextField cell = new TextField();
@@ -255,12 +297,16 @@ public class MainController {
         }
 
         return cell;
-    }
+    }//creates a textfield cell
 
     private boolean isBorderCell(int row, int column, int totalRows, int totalColumns) {
         return column == totalColumns + 1 || column == 0 || row == 0 || row == totalRows + 1;
-    }
+    }//used to check if the cell in question is at the border
 
+    /**
+     * i use this to add and dlete objects
+     * this method also creates a popup window with alerts
+     */
     @FXML
     private void objectModifier() {
         int a=Integer.parseInt(rownumber.getText());
@@ -321,13 +367,21 @@ public class MainController {
         });
     }
 
+    /**
+     * actually used to add or delete objects the object is deleted visually as it
+     * it is not possible to delete it from Battle object as there is no predefined functionn
+     * @param row
+     * @param column
+     * @param isPredaCon
+     * @param isAdd
+     */
     private void addOrDeleteRobot(int row, int column, boolean isPredaCon, boolean isAdd) {
-        System.out.println("Here is used ddddddddddddddddd");
+
         if (isAdd) {
             Entity newEntity = null;
             // Validate input fields before entity creation
             if (isPredaCon) {
-                // Assume these fields are properly validated for correct values
+
                 char symbol = Predsymbol.getText().charAt(0);
                 String name = Predname.getText();
                 int health = Integer.parseInt(Predhealth.getText());
@@ -347,21 +401,25 @@ public class MainController {
                 newEntity = new Maximal(symbol, name, health, weaponStrength, armourStrength);
             }
 
-            // Check if an entity can be added at the specified location
-            // This requires a method in your Battle class to check or directly add the entity
+
             if (newEntity != null && battle != null) {
                 battle.addEntity(row, column, newEntity); // Adjusted for correct indexes if necessary
-                updateUIWithNewEntity(row, column, newEntity); // Implement this method to update UI
+                updateUIWithNewEntity(row, column, newEntity); // Implemented this method to update UI
             }
             System.out.println(battle);
 
         } else {
-            visuallyClearCell(row - 1, column - 1);
+            visuallyClearCell(row - 1, column - 1);//visually deletes the object
         }
 
         prepareAndDisplayGrid();
     }
 
+    /**
+     * shows alert if there are any
+     * @param title
+     * @param message
+     */
     private void showAlert(String title, String message) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle(title);
@@ -414,6 +472,9 @@ public class MainController {
 
     }
 
+    /**
+     * this is used to display details about an object
+     */
     @FXML
     private void ObjectViewer() {
         // Assuming the declaration of battle somewhere in your class
@@ -449,7 +510,7 @@ public class MainController {
 
         dialog.setResultConverter(dialogButton -> {
             if (dialogButton == modifyButtonType) {
-                // Here you could capture the row and column values and do something with them
+
                 int row = Integer.parseInt(rowField.getText());
                 int column = Integer.parseInt(columnField.getText());
 
@@ -520,7 +581,7 @@ public class MainController {
     private void quitApplication() {
         Platform.exit();
     }
-    // This variable should be a class member, not inside the method.
+
     private File currentFile = null;
 
     /**

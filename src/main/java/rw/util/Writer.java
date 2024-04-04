@@ -1,3 +1,8 @@
+/**
+ * Name: Jaspinder Singh Maan
+ * Tutorial : TUT 15
+ * UCID: 30209953
+ */
 package rw.util;
 
 import rw.battle.Battle;
