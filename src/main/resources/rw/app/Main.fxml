@@ -25,15 +25,16 @@
             <menus>
                 <Menu mnemonicParsing="false" text="File">
                     <items>
+
                         <MenuItem fx:id="openo" mnemonicParsing="false" onAction="#fileLoader" text="Open…" />
                         <MenuItem fx:id="saveo" mnemonicParsing="false" text="Save" />
                         <MenuItem fx:id="SaveAso" mnemonicParsing="false" text="Save As…" />
-                        <MenuItem fx:id="quito" mnemonicParsing="false" text="Quit" />
+                        <MenuItem fx:id="quito" mnemonicParsing="false" onAction="#quitApplication" text="Quit" />
                     </items>
                 </Menu>
                 <Menu mnemonicParsing="false" text="About">
                     <items>
-                        <MenuItem mnemonicParsing="false" text="About MyHelloApp" />
+                        <MenuItem fx:id="abouto" mnemonicParsing="false" onAction="#AboutBox" text="About App" />
                     </items>
                 </Menu>
             </menus>
@@ -91,8 +92,8 @@
                 <AnchorPane>
                     <children>
                         <Label alignment="CENTER" font="$x1" layoutX="14.0" layoutY="14.0" style="&#10;" text="Details" textAlignment="CENTER" textFill="$x2" wrapText="false" />
-                        <TextArea layoutX="10.0" layoutY="41.0" prefHeight="200.0" prefWidth="200.0" />
-                        <Button layoutX="10.0" layoutY="263.0" mnemonicParsing="false" text="Show details" />
+                        <TextArea fx:id="infoViewerTextArea" layoutX="10.0" layoutY="41.0" prefHeight="200.0" prefWidth="200.0" />
+                        <Button fx:id="showDetailButton" layoutX="10.0" layoutY="263.0" mnemonicParsing="false" onAction="#ObjectViewer" text="Show details" />
                         <Button layoutX="10.0" layoutY="302.0" mnemonicParsing="false" onAction="#objectModifier" text="Add/delete Robots" />
                     </children>
                 </AnchorPane>
@@ -100,7 +101,7 @@
         </SplitPane>
         <HBox id="HBox" alignment="CENTER_LEFT" spacing="5.0" VBox.vgrow="NEVER">
             <children>
-                <Label maxHeight="1.7976931348623157E308" maxWidth="-1.0" text="Left status" HBox.hgrow="ALWAYS">
+                <Label fx:id="leftStatusLabel" maxHeight="1.7976931348623157E308" maxWidth="-1.0" text="Left status" HBox.hgrow="ALWAYS">
                     <font>
                         <Font size="11.0" fx:id="x3" />
                     </font>
