@@ -17,7 +17,7 @@ public class Writer {
     public static void saveBattle(Battle battle, File file) {
         try (FileWriter writer = new FileWriter(file)) {
             // Write rows and columns
-            writer.write(battle.getRows() + " " + battle.getColumns() + "\n");
+            writer.write(battle.getRows() + "\n" + battle.getColumns() + "\n");
 
             // Iterate over each cell
             IntStream.range(0, battle.getRows()).forEach(row -> {
